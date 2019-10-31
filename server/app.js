@@ -7,7 +7,8 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
 const session = require('express-session');
-
+const RedisStore = require('connect-redis')(session);
+const url = require('url');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
@@ -19,6 +20,13 @@ mongoose.connect(dbURL, (err) =>{
     }
 });
 
+let redisURL = {
+    hostname: 'redis-17995.c15.us-east-1-4.ec2.cloud.redislabs.com',
+    port: '17995'
+};
+
+let redisPass = 'fOrInnzk9aMVn1nLinQCGU4W2XqZaUI8';
+
 const router = require('./router.js');
 
 const app = express();
@@ -28,6 +36,11 @@ app.use(compression());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(session({
     key: 'sessionid',
+    store: new RedisStore({
+        host: redisURL.hostname,
+        port: redisURL.port,
+        pass: redisPass,
+    }),
     secret: 'Domo Arigato',
     resave: true,
     saveUninitialized: true,
