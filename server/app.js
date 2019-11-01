@@ -28,6 +28,11 @@ let redisURL = {
 
 let redisPass = 'fOrInnzk9aMVn1nLinQCGU4W2XqZaUI8';
 
+if(process.env.REDISCLOUD_URL){
+    redisURL = url.parse(process.env.REDISCLOUD_URL);
+    redisPass = redisURL.auth.split(':')[1];
+}
+
 const router = require('./router.js');
 
 const app = express();
