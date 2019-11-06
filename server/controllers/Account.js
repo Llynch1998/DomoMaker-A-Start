@@ -5,9 +5,7 @@ const loginPage = (req,res) =>{
     res.render('login', {csrfToken: req.csrfToken()});
 };
 
-const signupPage = (req,res) =>{
-    res.render('signup', {csrfToken: req.csrfToken()});
-};
+
 
 const logout = (req,res) =>{
     req.session.destroy();
@@ -72,12 +70,24 @@ const signup = (request, response) =>{
             }
             return res.status(400).json({error: 'An error occurred'});
         })
-    })
+    });
 
+   
+
+};
+
+const getToken = (request, response) =>{
+    const req = request;
+    const res = response;
+
+    const csrfJSON = {
+        csrfToken: req.csrfToken(),
+    };
+    res.json(csrfJSON);
 };
 
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
-module.exports.signupPage = signupPage;
+module.exports.getToken = getToken;
 module.exports.signup = signup;
